@@ -9,7 +9,9 @@ public static class CSVReader{
 
     static Dictionary<string, string> iDFromFile = new Dictionary<string, string>();//map<path, IDKey>
 
-    static Dictionary<string, Dictionary<string, List<object>>> Library = new Dictionary<string, Dictionary<string, List<object>>>();//map<path, map<ID,List<Values>>>
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    //static Dictionary<string, Dictionary<string, List<object>>> Library = new Dictionary<string, Dictionary<string, List<object>>>();//map<path, map<ID,List<Values>>>
+    static Dictionary<string, Dictionary<string, List<string>>> Library = new Dictionary<string, Dictionary<string, List<string>>>();//map<path, map<ID,List<Values>>>
 
     #endregion
     #region ===== ===== CORE ===== =====
@@ -23,8 +25,10 @@ public static class CSVReader{
     /// <param name="path">the hole path to the csv file (with ending)</param>
     /// <param name="seperator">the seperator of the coloms default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
-    public static Dictionary<string, List<object>> LoadCSV(string path, char seperator = ';') {
-        if (Library.ContainsKey(path)) {
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    //public static Dictionary<string, List<object>> LoadCSV(string path, char seperator = ';') {
+    public static Dictionary<string, List<string>> LoadCSV(string path, char seperator = ';') {
+            if (Library.ContainsKey(path)) {
             return Library[path];
         }
 
@@ -38,11 +42,15 @@ public static class CSVReader{
     /// <param name="path">the hole path to the csv file (with ending)</param>
     /// <param name="seperator">the seperator of the coloms default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
-    public static Dictionary<string, List<object>> ReloadCSV(string path, char seperator = ';') {
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    //public static Dictionary<string, List<object>> ReloadCSV(string path, char seperator = ';') {
+    public static Dictionary<string, List<string>> ReloadCSV(string path, char seperator = ';') {
 
         Debug.Log("i'm Reloading " + path);
 
-        Dictionary<string, List<object>> value = new Dictionary<string, List<object>>();
+        //if i get the Generic funktions to work ===== ===== ----- -----
+        //Dictionary<string, List<object>> value = new Dictionary<string, List<object>>();
+        Dictionary<string, List<string>> value = new Dictionary<string, List<string>>();
 
         string[] Lines;
 
@@ -51,13 +59,17 @@ public static class CSVReader{
         while (!reader.isDone) ;
 
         if(reader.error != "") {
-            value.Add("ERROR", new List<object>());
+            //if i get the Generic funktions to work ===== ===== ----- -----
+            //value.Add("ERROR", new List<object>());
+            value.Add("ERROR", new List<string>());
             return value;
         }
         Lines = reader.text.Split(System.Environment.NewLine[0]);
 #else
         if (!File.Exists(path)) {
-            value.Add("ERROR", new List<object>());
+            //if i get the Generic funktions to work ===== ===== ----- -----
+            //value.Add("ERROR", new List<object>());
+            value.Add("ERROR", new List<string>());
             return value;
         }
         Lines = File.ReadAllLines(path);
@@ -71,8 +83,10 @@ public static class CSVReader{
                 }
                 iDFromFile.Add(path, LineValues[0]);
             }
-            List<object> temp = new List<object>();
-            for(int j = 1; j < LineValues.Length; j++) {//TODO: identifier not in first collum
+            //if i get the Generic funktions to work ===== ===== ----- -----
+            //List<object> temp = new List<object>();
+            List<string> temp = new List<string>();
+            for (int j = 1; j < LineValues.Length; j++) {//TODO: identifier not in first collum
                 temp.Add(LineValues[j]);
             }
             value.Add(LineValues[0], temp);//TODO: identifier not in first collum
@@ -98,7 +112,9 @@ public static class CSVReader{
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
     /// <param name="seperator">the seperator of the coloms default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
-    public static Dictionary<string, List<object>> LoadCSVFromStreamingAsset (string path, char seperator = ';') {
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    //public static Dictionary<string, List<object>> LoadCSVFromStreamingAsset (string path, char seperator = ';') {
+    public static Dictionary<string, List<string>> LoadCSVFromStreamingAsset(string path, char seperator = ';') {
         return LoadCSV(Application.streamingAssetsPath + "/" + path, seperator);
     }
 
@@ -109,13 +125,16 @@ public static class CSVReader{
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
     /// <param name="seperator">the seperator of the coloms default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
-    public static Dictionary<string, List<object>> ReloadCSVFromStreamingAsset(string path, char seperator = ';') {
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    //public static Dictionary<string, List<object>> ReloadCSVFromStreamingAsset(string path, char seperator = ';') {
+    public static Dictionary<string, List<string>> ReloadCSVFromStreamingAsset(string path, char seperator = ';') {
         return ReloadCSV(Application.streamingAssetsPath + "/" + path, seperator);
     }
 
     #endregion
     #region ===== ===== Standard API ===== ===== //Dose not Work!
-
+    //if i get the Generic funktions to work ===== ===== ----- -----
+    /*
     public static bool getValue<T>(out T value, string path, string id, int columnIndex = 0, bool save = true) {
         if (save) {
             value = default(T);
@@ -168,7 +187,7 @@ public static class CSVReader{
     public static bool getValueFromStreamingAsset<T>(out T value, string path, string id, string columnName, bool save = true, string headerID = "") {
         return getValue(out value, Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
     }
-
+    */
     #endregion
     #region ===== ===== Old API ===== =====
     #region strings
