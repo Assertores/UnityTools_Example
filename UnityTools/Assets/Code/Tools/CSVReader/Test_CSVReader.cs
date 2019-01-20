@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Test_CSVReader : MonoBehaviour {
 
-    [SerializeField] string WholePath;
-    [SerializeField] string StreamingAssetPath;
+    [SerializeField] string _wholePath;
+    [SerializeField] string _streamingAssetPath;
 
     void Start() {
         Retest();
@@ -15,7 +15,7 @@ public class Test_CSVReader : MonoBehaviour {
 
         //if i get the Generic funktions to work ===== ===== ----- -----
         //Dictionary<string, List<object>> temp = CSVReader.LoadCSV(WholePath);
-        Dictionary<string, List<string>> temp = CSVReader.LoadCSV(WholePath);
+        Dictionary<string, List<string>> temp = CSVReader.LoadCSV(_wholePath);
 
         foreach (var it in temp) {
             string line = it.Key + ":";
@@ -32,10 +32,10 @@ public class Test_CSVReader : MonoBehaviour {
         float fTemp;
         bool bTemp;
 
-        sTemp = CSVReader.getValueAsString(WholePath, "WATER", "German");
-        iTemp = CSVReader.getValueAsIntFromStreamingAsset(StreamingAssetPath, "LIVE", 0);
-        fTemp = CSVReader.getValueAsFloatFromStreamingAsset(StreamingAssetPath, "SPEED", 0);
-        bTemp = CSVReader.getValueAsBoolFromStreamingAsset(StreamingAssetPath, "NUDE", 0);
+        sTemp = CSVReader.getValueAsString(_wholePath, "WATER", "German");
+        iTemp = CSVReader.getValueAsIntFromStreamingAsset(_streamingAssetPath, "LIVE", 0);
+        fTemp = CSVReader.getValueAsFloatFromStreamingAsset(_streamingAssetPath, "SPEED", 0);
+        bTemp = CSVReader.getValueAsBoolFromStreamingAsset(_streamingAssetPath, "NUDE", 0);
 
         print("WATER in German: " + sTemp + " | LIVE: " + iTemp + " | SPEED: " + fTemp + " | NUDE: " + bTemp);
 
