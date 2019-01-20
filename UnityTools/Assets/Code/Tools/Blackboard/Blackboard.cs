@@ -3,13 +3,16 @@ using System.Collections.Generic;
 
 /// <summary>
 /// with this class you can store and access variables from anywhere in you project.
-/// node this is not ThreadSave yet.
+/// note this is not ThreadSave yet.
 /// </summary>
 public static class Blackboard {
 
     #region ===== ===== DATA ===== =====
 
-    static Dictionary<System.Type, Dictionary<string, List<object>>> _library = new Dictionary<System.Type, Dictionary<string, List<object>>>();//all Blackboards of all types that have already be initialiced. node the ID is always a string
+    ///<summary>
+    /// all Blackboards of all types that have already be initialized. note the ID is always a string
+    /// </summary>
+    static Dictionary<System.Type, Dictionary<string, List<object>>> _library = new Dictionary<System.Type, Dictionary<string, List<object>>>();
 
     #endregion
     #region ===== ===== CORE ===== =====
@@ -18,7 +21,7 @@ public static class Blackboard {
     /// !!USE API!!
     /// Creates an new Blackboard.
     /// </summary>
-    /// <typeparam name="T">the Type of the Blackboard</typeparam>
+    /// <typeparam name="T">the Type of the Blackboard (int, string, Transform ...)</typeparam>
     /// <returns>false if this BlackboardType already existes</returns>
     public static bool NewBlackboard<T>() {
         if (_library.ContainsKey(typeof(T))) {
