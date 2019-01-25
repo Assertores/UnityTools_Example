@@ -24,7 +24,7 @@ public static class CSVReader{
     /// if the file is already loaded it will return the internal memory.
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="seperator">the seperator of the coloms default value ';'</param>
+    /// <param name="seperator">the seperator of the columns. default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
     //if i get the Generic funktions to work ===== ===== ----- -----
     //public static Dictionary<string, List<object>> LoadCSV(string path, char seperator = ';') {
@@ -41,7 +41,7 @@ public static class CSVReader{
     /// loads a CSV event if it already was loaded and overwrites it in the Library
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="seperator">the seperator of the coloms default value ';'</param>
+    /// <param name="seperator">the seperator of the columns default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
     //if i get the Generic funktions to work ===== ===== ----- -----
     //public static Dictionary<string, List<object>> ReloadCSV(string path, char seperator = ';') {
@@ -54,7 +54,7 @@ public static class CSVReader{
         string[] Lines;
 
 #if UNITY_ANDROID
-        WWW reader = new WWW(path);//TODO: make non Unity spezific
+        WWW reader = new WWW(path);//TODO: make non Unity specific
         while (!reader.isDone) ;
 
         if(reader.error != "") {
@@ -73,10 +73,10 @@ public static class CSVReader{
         }
         Lines = File.ReadAllLines(path);
 #endif
-        
+
         for(int i = 0; i < Lines.Length; i++) {
             string[] LineValues = Lines[i].Trim().Split(seperator);
-            if(i == 0) {//TODO: identifier not in first collum
+            if(i == 0) {//TODO: identifier not in first column
                 if (_iDFromFile.ContainsKey(path)) {
                     _iDFromFile.Remove(path);
                 }
@@ -85,10 +85,10 @@ public static class CSVReader{
             //if i get the Generic funktions to work ===== ===== ----- -----
             //List<object> temp = new List<object>();
             List<string> temp = new List<string>();
-            for (int j = 1; j < LineValues.Length; j++) {//TODO: identifier not in first collum
+            for (int j = 1; j < LineValues.Length; j++) {//TODO: identifier not in first column
                 temp.Add(LineValues[j]);
             }
-            value.Add(LineValues[0], temp);//TODO: identifier not in first collum
+            value.Add(LineValues[0], temp);//TODO: identifier not in first column
         }
 
         if (_library.ContainsKey(path)) {
@@ -108,7 +108,7 @@ public static class CSVReader{
     /// if the file is already loaded it will return the internal memory.
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="seperator">the seperator of the coloms default value ';'</param>
+    /// <param name="seperator">the seperator of the columns default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
     //if i get the Generic funktions to work ===== ===== ----- -----
     //public static Dictionary<string, List<object>> LoadCSVFromStreamingAsset (string path, char seperator = ';') {
@@ -121,7 +121,7 @@ public static class CSVReader{
     /// loads a CSV event if it already was loaded and overwrites it in the Library
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="seperator">the seperator of the coloms default value ';'</param>
+    /// <param name="seperator">the seperator of the columns default value ';'</param>
     /// <returns>a dictionary as id and value lists</returns>
     //if i get the Generic funktions to work ===== ===== ----- -----
     //public static Dictionary<string, List<object>> ReloadCSVFromStreamingAsset(string path, char seperator = ';') {
@@ -192,14 +192,14 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
-    /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
-    public static string getValueAsString(string path, string id, int columnIndex = 0, bool save = true) { //if the first collom is the ID: collom 0 will give you the next collom after the ID. TLDR: ID Collum will be ignored
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
+    /// <returns>the value as string or as Error message starting with "ERROR:"</returns>
+    public static string getValueAsString(string path, string id, int columnIndex = 0, bool save = true) { //if the first column is the ID: column 0 will give you the next column after the ID. TL;DR: ID Column will be ignored
         if (save) {
             if (!_library.ContainsKey(path)) {
                 if (LoadCSV(path).ContainsKey("ERROR")) {
@@ -219,13 +219,13 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
-    /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
-    /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the firs row as identifier</param>
+    /// <param name="id">identifier for which you want a value from</param>
+    /// <param name="columnName">header name</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
+    /// <param name="headerID">identifier for the header if you want to specify it. default value = "" which uses the first row as identifier</param>
     /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
     public static string getValueAsString(string path, string id, string columnName, bool save = true, string headerID = "") {
         if (save) {
@@ -252,12 +252,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
     public static string getValueAsStringFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
         return getValueAsString(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
@@ -265,13 +265,13 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
-    /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
-    /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
+    /// <param name="id">identifier for which you want a value from</param>
+    /// <param name="columnName">header name</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
+    /// <param name="headerID">identifier for the header if you want to specify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
     public static string getValueAsStringFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
         return getValueAsString(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
@@ -282,12 +282,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as int or the minimum int value (-2147483648)</returns>
     public static int getValueAsInt(string path, string id, int columnIndex = 0, bool save = true) {
         int value;
@@ -300,12 +300,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
-    /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="id">identifier for which you want a value from</param>
+    /// <param name="columnName">header name</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as int or the minimum int value (-2147483648)</returns>
     public static int getValueAsInt(string path, string id, string columnName, bool save = true, string headerID = "") {
@@ -321,12 +321,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as int or the minimum int value (-2147483648)</returns>
     public static int getValueAsIntFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
         return getValueAsInt(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
@@ -334,12 +334,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as int or the minimum int value (-2147483648)</returns>
     public static int getValueAsIntFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
@@ -351,12 +351,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
     public static float getValueAsFloat(string path, string id, int columnIndex = 0, bool save = true) {
         float value;
@@ -368,12 +368,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
     public static float getValueAsFloat(string path, string id, string columnName, bool save = true, string headerID = "") {
@@ -389,12 +389,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
     public static float getValueAsFloatFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
         return getValueAsFloat(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
@@ -402,12 +402,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
     public static float getValueAsFloatFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
@@ -419,12 +419,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as bool or false(sorry)</returns>
     public static bool getValueAsBool(string path, string id, int columnIndex = 0, bool save = true) {
         bool value;
@@ -437,12 +437,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the whole path to the csv file (with ending)</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as bool or false(sorry)</returns>
     public static bool getValueAsBool(string path, string id, string columnName, bool save = true, string headerID = "") {
@@ -458,12 +458,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnIndex">value index </param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <returns>the value as bool or false(sorry)</returns>
     public static bool getValueAsBoolFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
         return getValueAsBool(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
@@ -471,12 +471,12 @@ public static class CSVReader{
 
     /// <summary>
     /// API;
-    /// accsesses a spezific value of an given key.
+    /// accesses a specific value of a given key
     /// </summary>
     /// <param name="path">the path to the csv file (with ending) relative to the StreamingAssets Folder</param>
-    /// <param name="id">identifier of witch you want a value from</param>
+    /// <param name="id">identifier for which you want a value from</param>
     /// <param name="columnName">headername</param>
-    /// <param name="save">if false all checks and savetymessures are deactivated. default value = true</param>
+    /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
     /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
     /// <returns>the value as bool or false(sorry)</returns>
     public static bool getValueAsBoolFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
