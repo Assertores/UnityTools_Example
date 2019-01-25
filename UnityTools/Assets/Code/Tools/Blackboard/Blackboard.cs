@@ -11,7 +11,7 @@ public static class Blackboard {
 
     ///<summary>
     /// All Blackboards of all types that have already been initialized.
-	/// note: the ID is always a string.
+    /// note: the ID is always a string.
     /// </summary>
     static Dictionary<System.Type, Dictionary<string, List<object>>> _library = new Dictionary<System.Type, Dictionary<string, List<object>>>();
 
