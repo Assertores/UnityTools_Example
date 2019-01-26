@@ -33,7 +33,7 @@ namespace AsserTOOLres {
                     _hasFinished = true;//make callback instadt?
                     return;
                 }
-                if (_nodes[_currentNode].nextTick()) {
+                if (_nodes[_currentNode].NextTick()) {
                     _currentNode++;
                 }
             }
