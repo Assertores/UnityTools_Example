@@ -14,5 +14,11 @@ public class Test_TrackingShot : MonoBehaviour {
 
     void Restart() {
         TrackingShot.StartTrackingShot(Cutsceen, Camera);
+        TrackingShot._onFinish += DoStuffWhenFinished;
+    }
+
+    void DoStuffWhenFinished() {
+        print("Cutsceen endet");
+        TrackingShot._onFinish -= DoStuffWhenFinished;
     }
 }
