@@ -20,6 +20,7 @@ namespace AsserTOOLres {
         float _startDistance;
         Quaternion _startRot;
         float _startFOV;
+        bool _finishedRotatoin = false;
 
         public bool NextTick() {
             return NextTick(Time.deltaTime);
@@ -35,6 +36,10 @@ namespace AsserTOOLres {
                 _startRot = _cam.rotation;
                 _startFOV = _cam.GetComponent<Camera>().fieldOfView;
                 _startDistance = Vector3.Distance(_cam.position, transform.position);
+                _finishedRotatoin = false;
+                if(_targetDistance < 0) {
+                    _targetDistance = _startDistance;
+                }
             }
             _collapsedTime += timeDelta;
 
@@ -45,10 +50,33 @@ namespace AsserTOOLres {
 
             float temp = _collapsedTime / _rotateTime;
             if (_collapsedTime < _rotateTime) {
-                _cam.rotation = Quaternion.Lerp(_startRot, transform.rotation, temp);
+                _cam.rotation = Quaternion.Slerp(Quaternion.LookRotation((transform.position - _startPos).normalized), transform.rotation, temp);
                 _cam.position = transform.position;
-                _cam.Translate(-Vector3.Lerp(_startPos - transform.position, transform.forward, temp).normalized * Mathf.Lerp(_startDistance, _targetDistance, temp));
+                float dist = Mathf.Lerp(_startDistance, _targetDistance, temp);
+                if (_doCameraCollition) {
+                    Ray ray = new Ray(transform.position, -_cam.forward);
+                    RaycastHit hit;
+                    if(Physics.Raycast(ray,out hit, dist)) {
+                        dist = Vector3.Distance(transform.position, hit.point);
+                    }
+                }
+                _cam.Translate(-Vector3.forward * dist);
+                _cam.rotation = Quaternion.Slerp(_startRot, transform.rotation, temp);
                 _cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(_startFOV, _targetFOV, temp);
+            } else if (!_finishedRotatoin) {
+                _cam.rotation = transform.rotation;
+                _cam.position = transform.position;
+                float dist = _targetDistance;
+                if (_doCameraCollition) {
+                    Ray ray = new Ray(transform.position, -_cam.forward);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, dist)) {
+                        dist = Vector3.Distance(transform.position, hit.point);
+                    }
+                }
+                _cam.Translate(-Vector3.forward * dist);
+                _cam.GetComponent<Camera>().fieldOfView = _targetFOV;
+                _finishedRotatoin = true;
             }
 
             return false;

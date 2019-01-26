@@ -5,28 +5,21 @@ using UnityEngine;
 namespace AsserTOOLres {
     public class TrackingShot : MonoBehaviour {
 
-        [SerializeField] Transform _rootNode;
+        static Transform _rootNode;
+        static ICameraNode[] _nodes;
 
-        ICameraNode[] _nodes;
-        int _currentNode = 0;
-        public bool _hasFinished { get; private set; } = true;
+        static int _currentNode = 0;
+        public static bool _hasFinished { get; private set; } = true;
 
-        void Start() {
-            if (!_rootNode) {
-                _rootNode = transform;
-            }
+        //public static TrackingShot _singelton;
+        //void Awake() {
+        //    if (!_singelton) {
+        //        _singelton = this;
+        //    } else {
+        //        Destroy(this);
+        //    }
+        //}
 
-            List<ICameraNode> tempList = new List<ICameraNode>();
-            ICameraNode temp;
-            for (int i = 0; i < _rootNode.childCount; i++) {
-                temp = _rootNode.GetChild(i).GetComponent<ICameraNode>();
-                if (temp != null) {
-                    tempList.Add(temp);
-                }
-            }
-            _nodes = tempList.ToArray();
-        }
-        
         void Update() {
             if (!_hasFinished) {
                 if(_currentNode >= _nodes.Length) {
@@ -39,7 +32,20 @@ namespace AsserTOOLres {
             }
         }
 
-        public void StartTrackingShot() {
+        public static void StartTrackingShot(Transform rootTransform, Transform camera) {
+            _rootNode = rootTransform;
+
+            List<ICameraNode> tempList = new List<ICameraNode>();
+            ICameraNode temp;
+            for (int i = 0; i < _rootNode.childCount; i++) {
+                temp = _rootNode.GetChild(i).GetComponent<ICameraNode>();
+                if (temp != null) {
+                    tempList.Add(temp);
+                    temp.SetCamera(camera);
+                }
+            }
+            _nodes = tempList.ToArray();
+
             _currentNode = 0;
             _hasFinished = false;
         } 
