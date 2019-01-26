@@ -6,8 +6,7 @@ using UnityEngine.UI;
 namespace AsserTOOLres {
     /// <summary>
     /// Localisation scripts must always have a public get list of Scriptreferences named references
-    /// Localisation scripts must always have a public void function called ChangeLanguage(string Language)
-    /// this script requires the CSVReader
+    /// Localisation scripts must always have a public void function called ChangeContent(string Language)
     /// </summary>
     public class Localize_text : MonoBehaviour {
 
@@ -19,7 +18,6 @@ namespace AsserTOOLres {
         public static List<Localize_text> references { get; private set; } = new List<Localize_text>();
 
         [SerializeField] Text[] _textField; //reference to the Textfield
-        [SerializeField] string _streamingAssetPath; //the path to the csv file which is used for the Localisation
         [SerializeField] string _id; //the id of the string
 
         #endregion
@@ -51,23 +49,22 @@ namespace AsserTOOLres {
         #region ===== ===== API ===== =====
 
         /// <summary>
-        /// changes the language of all referenced texts.
-        /// if the string in this Language is not found the id will be displayed.
+        /// call this to get the id set in the Inspektor
         /// </summary>
-        /// <param name="Language">the name of the Language as it is written in the csv file</param>
-        public void ChangeLanguage(string Language) {
-            string temp = CSVReader.getValueAsStringFromStreamingAsset(_streamingAssetPath, _id, Language);
-            if (temp.Contains("ERROR")) {
-                foreach (var it in _textField) {
-                    it.text = _id;
-                }
-            } else {
-                foreach (var it in _textField) {
-                    it.text = temp;
-                }
+        /// <returns>the ID set in the Inspektor</returns>
+        public string GetID() {
+            return _id;
+        }
+
+        /// <summary>
+        /// changes all referenced texts.
+        /// no parameter will clear the texts.
+        /// </summary>
+        /// <param name="Content">the text that will be displayed</param>
+        public void ChangeContent(string text = "") {
+            foreach (var it in _textField) {
+                it.text = text;
             }
-
-
         }
 
         #endregion
