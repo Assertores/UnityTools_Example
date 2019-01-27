@@ -18,6 +18,9 @@ namespace AsserTOOLres {
         Transform _rootNode;
         ICameraNode[] _nodes;
 
+        Vector3 _cashNodePos;
+        Quaternion _cashNodeRot;
+        int _cashNodeIndex;
         int _currentNode = 0;
         bool _hasFinished = true;
 
@@ -44,7 +47,9 @@ namespace AsserTOOLres {
         void Update() {
             if (!_hasFinished) {
                 if(_currentNode >= _nodes.Length) {
-                    _onFinish();
+                    _rootNode.GetChild(_cashNodeIndex).transform.position = _cashNodePos;
+                    _rootNode.GetChild(_cashNodeIndex).transform.rotation = _cashNodeRot;
+                    _onFinish?.Invoke();
                     return;
                 }
                 if (_nodes[_currentNode].NextTick()) {
@@ -62,7 +67,8 @@ namespace AsserTOOLres {
         /// </summary>
         /// <param name="rootTransform">the root transform inwitch all the cutsceens nodes are as first childs. node scripts have to inharent ICameraNode</param>
         /// <param name="camera">the camera with witch the cuttscene should be played</param>
-        public static void StartTrackingShot(Transform rootTransform, Transform camera) {
+        /// <param name="cykleToStart">if true last node gets set to startingpoint of the camera</param>
+        public static void StartTrackingShot(Transform rootTransform, Transform camera, bool cykleToStart = false) {
 
             if(Singelton == null) {
                 GameObject tmp = new GameObject();
@@ -74,14 +80,24 @@ namespace AsserTOOLres {
 
             List<ICameraNode> tempList = new List<ICameraNode>();
             ICameraNode temp;
+            Singelton._cashNodeIndex = -1;
             for (int i = 0; i < Singelton._rootNode.childCount; i++) {
                 temp = Singelton._rootNode.GetChild(i).GetComponent<ICameraNode>();
                 if (temp != null) {
                     tempList.Add(temp);
                     temp.SetCamera(camera);
+                    Singelton._cashNodeIndex = i;
                 }
             }
             Singelton._nodes = tempList.ToArray();
+
+            Transform Tmp = Singelton._rootNode.GetChild(Singelton._cashNodeIndex).transform;
+            Singelton._cashNodePos = Tmp.position;
+            Singelton._cashNodeRot = Tmp.rotation;
+            if (cykleToStart) {
+                Tmp.position = camera.transform.position;
+                Tmp.rotation = camera.transform.rotation;
+            }
 
             Singelton._currentNode = 0;
             Singelton._hasFinished = false;
