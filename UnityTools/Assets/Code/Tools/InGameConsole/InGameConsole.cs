@@ -8,6 +8,8 @@ namespace AsserTOOLres {
 
         #region ===== ===== DATA ===== =====
 
+        static Dictionary<string, string> _aliasList = new Dictionary<string, string>();
+
         static Dictionary<string, System.Action<string>> _commandList = new Dictionary<string, System.Action<string>>();
 
         static Text _text = null;
@@ -73,7 +75,11 @@ namespace AsserTOOLres {
         /// </summary>
         /// <param name="command">the command</param>
         /// <param name="Lisener">funktion pointer to the Lisener funktion that will be added</param>
-        public static void AddLisener(string command, System.Action<string> Lisener) {
+        public static void AddListener(string command, System.Action<string> Lisener) {
+            if (_aliasList.ContainsKey(command)) {
+                command = _aliasList[command];
+            }
+
             if (_commandList.ContainsKey(command)) {
                 _commandList[command] += Lisener;
             } else {
@@ -87,7 +93,11 @@ namespace AsserTOOLres {
         /// </summary>
         /// <param name="command">the command</param>
         /// <param name="Lisener">funktion pointer to the Lisener funktion that should be removed</param>
-        public static void RemoveLisener(string command, System.Action<string> Lisener) {
+        public static void RemoveListener(string command, System.Action<string> Lisener) {
+            if (_aliasList.ContainsKey(command)) {
+                command = _aliasList[command];
+            }
+
             if (_commandList.ContainsKey(command)) {
                 _commandList[command] -= Lisener;
                 if (_commandList[command] == null) {
@@ -101,7 +111,7 @@ namespace AsserTOOLres {
         /// </summary>
         /// <param name="command">the command to add</param>
         public static void AddCommand(string command) {
-            if (_commandList.ContainsKey(command))
+            if (_commandList.ContainsKey(command) || _aliasList.ContainsKey(command))
                 return;
             _commandList.Add(command, WriteToConsole);
             _commandList[command] -= WriteToConsole;
@@ -119,7 +129,52 @@ namespace AsserTOOLres {
                     return true;
                 }
             }
+            foreach(var it in _aliasList) {
+                Debug.Log("im here");
+                if (command.StartsWith(it.Key)) {
+                    
+                    _commandList[it.Value]?.Invoke(command.Substring(it.Key.Length).Trim());
+                    return true;
+                }
+            }
             return false;
+        }
+
+        /// <summary>
+        /// create one alias for one key
+        /// </summary>
+        /// <param name="key">the key the alias should be redirekted</param>
+        /// <param name="alias">the alias command</param>
+        public static void CreateAlias(string key, string alias) {
+            if (_aliasList.ContainsKey(alias)) {
+                return;
+            }
+            if (_aliasList.ContainsKey(key)) {
+                key = _aliasList[key];
+            }
+            if (_commandList.ContainsKey(key)) {
+                _aliasList.Add(alias, key);
+            }
+        }
+
+        /// <summary>
+        /// creates aliases for one key
+        /// </summary>
+        /// <param name="key">the key all the aliases should be redirekted</param>
+        /// <param name="alias">the alias commands</param>
+        public static void CreateAlias(string key, string[] alias) {
+            if (_aliasList.ContainsKey(key)) {
+                key = _aliasList[key];
+            }
+            foreach (var it in alias) {
+                if (_aliasList.ContainsKey(it)) {
+                    continue;
+                }
+                if (_commandList.ContainsKey(key)) {
+                    _aliasList.Add(it, key);
+                }
+            }
+            
         }
 
         #endregion

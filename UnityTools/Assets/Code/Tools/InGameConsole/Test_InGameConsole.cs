@@ -34,7 +34,7 @@ public class Test_InGameConsole : MonoBehaviour {
             InGameConsole.WriteToConsole("/test command was not found");
         }
 
-        InGameConsole.AddLisener("/test", OnTestCommand);
+        InGameConsole.AddListener("/test", OnTestCommand);
 
         if (InGameConsole.InterpreteCommand("/test")) {
             InGameConsole.WriteToConsole("/test command was found");
@@ -42,7 +42,7 @@ public class Test_InGameConsole : MonoBehaviour {
             InGameConsole.WriteToConsole("/test command was not found");
         }
 
-        InGameConsole.AddLisener("/Retest", RetestL);
+        InGameConsole.AddListener("/Retest", RetestL);
 
         if (InGameConsole.InterpreteCommand("/Retest")) {
             InGameConsole.WriteToConsole("/Retest command was found");
@@ -50,7 +50,7 @@ public class Test_InGameConsole : MonoBehaviour {
             InGameConsole.WriteToConsole("/Retest command was not found");
         }
 
-        InGameConsole.RemoveLisener("/Retest", RetestL);
+        InGameConsole.RemoveListener("/Retest", RetestL);
 
         if (InGameConsole.InterpreteCommand("/Retest")) {
             InGameConsole.WriteToConsole("/Retest command was found");
@@ -58,9 +58,12 @@ public class Test_InGameConsole : MonoBehaviour {
             InGameConsole.WriteToConsole("/Retest command was not found");
         }
 
-        InGameConsole.AddLisener("/Retest", RetestL);
+        InGameConsole.AddListener("/Retest", RetestL);
 
-        InGameConsole.AddLisener("/Close", OnCloseConsole);
+        InGameConsole.AddListener("/Close", OnCloseConsole);
+
+        InGameConsole.CreateAlias("/Close", "/close");
+        InGameConsole.CreateAlias("/close", new[] {"/Quit", "/quit" });
 
         InGameConsole.Inizialice(_textField, _inputField);
 
