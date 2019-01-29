@@ -5,8 +5,11 @@ using UnityEngine;
 namespace AsserTOOLres {
     public class CM_Dolly : MonoBehaviour, ICameraNode {
 
+        [Tooltip("the time it takes to dolly to the new position")]
         [SerializeField] float _dollyTime;
+        [Tooltip("the time the kamera will wait on the new position")]
         [SerializeField] float _waitingTime;
+        [Tooltip("The new Field of View")]
         [SerializeField] float _targetFOV;
 
         float _collapsedTime = 0;

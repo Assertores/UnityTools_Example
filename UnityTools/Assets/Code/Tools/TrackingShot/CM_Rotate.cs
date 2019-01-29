@@ -5,12 +5,18 @@ using UnityEngine;
 namespace AsserTOOLres {
     public class CM_Rotate : MonoBehaviour, ICameraNode {
 
+        [Tooltip("the time it takes to rotate to the new position")]
         [SerializeField] float _rotateTime = 2;
+        [Tooltip("the time the kamera will wait on the new position")]
         [SerializeField] float _waitingTime = 2;
+        [Tooltip("The new Field of View")]
         [SerializeField] float _targetFOV = 60;
 
+        [Tooltip("determins if the camera will look towords the center or away from the center")]
         [SerializeField] bool _LockCameraInward = true;
+        [Tooltip("stops the Camera to clip throw walls")]
         [SerializeField] bool _doCameraCollition = true;
+        [Tooltip("the target distence from the center point. stays the same as the start distance if it is negative")]
         [SerializeField] float _targetDistance = -1;
 
         float _collapsedTime = 0;
