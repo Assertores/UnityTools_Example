@@ -2648,5 +2648,6 @@ MonoBehaviour:
   _rotateTime: 2
   _waitingTime: 2
   _targetFOV: 60
+  _LockCameraInward: 0
   _doCameraCollition: 1
   _targetDistance: 30
