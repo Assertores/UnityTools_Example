@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace AsserTOOLres {
-    public class CM_Rotate : MonoBehaviour, ICameraNode {
+    public class CN_Rotate : MonoBehaviour, ICameraNode {
 
         [Tooltip("the time it takes to rotate to the new position")]
         [SerializeField] float _rotateTime = 2;
@@ -11,6 +11,9 @@ namespace AsserTOOLres {
         [SerializeField] float _waitingTime = 2;
         [Tooltip("The new Field of View")]
         [SerializeField] float _targetFOV = 60;
+        [Tooltip("the ratio of elapst time between 0 and 1 at x and the ratio of elapst position between 0 and 1 of y")]
+        [SerializeField]
+        AnimationCurve _lerpCurve;
 
         [Tooltip("determins if the camera will look towords the center or away from the center")]
         [SerializeField] bool _LockCameraInward = true;
@@ -55,8 +58,8 @@ namespace AsserTOOLres {
                 return true;
             }
 
-            float temp = _collapsedTime / _rotateTime;
-            if (_collapsedTime < _rotateTime) {
+            float temp = _lerpCurve.Evaluate(_collapsedTime < _rotateTime ? _collapsedTime / _rotateTime : 1);
+            if (!_finishedRotatoin) {
                 _cam.rotation = Quaternion.Slerp(Quaternion.LookRotation((transform.position - _startPos).normalized), Quaternion.LookRotation(transform.forward), temp);
                 _cam.position = transform.position;
                 float dist = Mathf.Lerp(_startDistance, _targetDistance, temp);
@@ -70,21 +73,9 @@ namespace AsserTOOLres {
                 _cam.Translate(-Vector3.forward * dist);
                 _cam.rotation = Quaternion.Slerp(_startRot, Quaternion.LookRotation(transform.forward * ((_LockCameraInward) ? 1 : -1)), temp);
                 _cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(_startFOV, _targetFOV, temp);
-            } else if (!_finishedRotatoin) {
-                _cam.rotation = Quaternion.LookRotation(transform.forward);
-                _cam.position = transform.position;
-                float dist = _targetDistance;
-                if (_doCameraCollition) {
-                    Ray ray = new Ray(transform.position, -_cam.forward);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, dist)) {
-                        dist = Vector3.Distance(transform.position, hit.point) - 1f;
-                    }
+                if(_collapsedTime >= _rotateTime) {
+                    _finishedRotatoin = true;
                 }
-                _cam.Translate(-Vector3.forward * dist);
-                _cam.rotation = Quaternion.LookRotation(transform.forward * ((_LockCameraInward) ? 1 : -1));
-                _cam.GetComponent<Camera>().fieldOfView = _targetFOV;
-                _finishedRotatoin = true;
             }
 
             return false;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace AsserTOOLres {
-    public class CM_Dolly : MonoBehaviour, ICameraNode {
+    public class CN_Dolly : MonoBehaviour, ICameraNode {
 
         [Tooltip("the time it takes to dolly to the new position")]
         [SerializeField] float _dollyTime;
@@ -11,6 +11,8 @@ namespace AsserTOOLres {
         [SerializeField] float _waitingTime;
         [Tooltip("The new Field of View")]
         [SerializeField] float _targetFOV;
+        [Tooltip("the ratio of elapst time between 0 and 1 at x and the ratio of elapst position between 0 and 1 at y")]
+        [SerializeField] AnimationCurve _lerpCurve;
 
         float _collapsedTime = 0;
 
@@ -44,17 +46,15 @@ namespace AsserTOOLres {
                 _collapsedTime = 0;
                 return true;
             }
-
-            float temp = _collapsedTime / _dollyTime;
-            if (_collapsedTime < _dollyTime) {
+            
+            float temp = _lerpCurve.Evaluate(_collapsedTime < _dollyTime ? _collapsedTime / _dollyTime : 1);
+            if (!_finishedDolly) {
                 _cam.position = Vector3.Lerp(_startPos, transform.position, temp);
                 _cam.rotation = Quaternion.Lerp(_startRot, transform.rotation, temp);
                 _cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(_startFOV, _targetFOV, temp);
-            } else if(!_finishedDolly) {
-                _cam.position = transform.position;
-                _cam.rotation = transform.rotation;
-                _cam.GetComponent<Camera>().fieldOfView = _targetFOV;
-                _finishedDolly = true;
+                if(_collapsedTime >= _dollyTime) {
+                    _finishedDolly = true;
+                }
             }
 
             return false;

@@ -666,6 +666,39 @@ MonoBehaviour:
   _dollyTime: 2
   _waitingTime: 3
   _targetFOV: 60
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.4978333
+      value: 1.0004268
+      inSlope: 0.021688476
+      outSlope: 0.021688476
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.3265568
+    - serializedVersion: 3
+      time: 0.99823
+      value: 0.5026703
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,6 +1531,30 @@ MonoBehaviour:
   _dollyTime: 2
   _waitingTime: 0
   _targetFOV: 30
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1262009538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1544,6 +1601,30 @@ MonoBehaviour:
   _dollyTime: 2
   _waitingTime: 3
   _targetFOV: 30
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1333137965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,6 +1821,7 @@ GameObject:
   - component: {fileID: 1406998565}
   - component: {fileID: 1406998569}
   - component: {fileID: 1406998570}
+  - component: {fileID: 1406998571}
   m_Layer: 0
   m_Name: TestCamber
   m_TagString: Untagged
@@ -1806,7 +1888,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406998564}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f078dbb0128bd714a8a2b18f62bcff29, type: 3}
   m_Name: 
@@ -1820,13 +1902,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406998564}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d207056ad4c118a4b8ff10b80dea0187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _textField: {fileID: 850963635}
   _inputField: {fileID: 719428111}
+--- !u!114 &1406998571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406998564}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67706e2f6ca36640a7ded6288ee8963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fade: 0
+  alph: 0
 --- !u!1 &1518973065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1867,12 +1963,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 1518973065}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b177bb49fbf12d94d87745e241e04d40, type: 3}
+  m_Script: {fileID: 11500000, guid: 98fc4afc0627b4641bfd1a8dd3bdc674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dollyTime: 2
-  _waitingTime: 3
+  _fadeOutTime: 1
+  _stayFadedOut: 1
+  _fadeInTime: 1
+  _waitTime: 1
   _targetFOV: 100
+  _fadeColor: {r: 0.8396226, g: 0.6948324, b: 0.20990565, a: 1}
+  _lerpOutCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _lerpInCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1557426211
 GameObject:
   m_ObjectHideFlags: 0
@@ -2385,6 +2532,30 @@ MonoBehaviour:
   _dollyTime: 1
   _waitingTime: 2
   _targetFOV: 60
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1962289993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,6 +2819,30 @@ MonoBehaviour:
   _rotateTime: 2
   _waitingTime: 2
   _targetFOV: 60
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _LockCameraInward: 1
   _doCameraCollition: 1
-  _targetDistance: 30
+  _targetDistance: -1
