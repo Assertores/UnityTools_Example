@@ -1821,7 +1821,6 @@ GameObject:
   - component: {fileID: 1406998565}
   - component: {fileID: 1406998569}
   - component: {fileID: 1406998570}
-  - component: {fileID: 1406998571}
   m_Layer: 0
   m_Name: TestCamber
   m_TagString: Untagged
@@ -1902,27 +1901,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406998564}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d207056ad4c118a4b8ff10b80dea0187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _textField: {fileID: 850963635}
   _inputField: {fileID: 719428111}
---- !u!114 &1406998571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1406998564}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d67706e2f6ca36640a7ded6288ee8963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fade: 0
-  alph: 0
 --- !u!1 &1518973065
 GameObject:
   m_ObjectHideFlags: 0
