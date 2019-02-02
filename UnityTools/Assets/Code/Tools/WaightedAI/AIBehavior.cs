@@ -7,20 +7,42 @@ namespace AsserTOOLres {
 
         public static List<AIBehavior> _aIReverences = new List<AIBehavior>();
 
-        [SerializeField] IWaightedAIDesition[] _behaviors;
+        IWaightedAIDesition[] _behaviors;
 
         int _currentBehavior = -1;
+
+        void Awake() {
+            _aIReverences.Add(this);
+        }
+        void OnDestroy() {
+            _aIReverences.Add(this);
+        }
+
+        void Start() {
+            _behaviors = GetComponents<IWaightedAIDesition>();
+
+            foreach(var it in _behaviors) {
+                it.Initialice(this);
+            }
+
+            Reevaluate();
+        }
         
         public void Reevaluate() {
-            _currentBehavior = -1;
+            int tempBehavior = -1;
             float currentWaight = float.MinValue;
             float tmp;
             for (int i = 0; i < _behaviors.Length; i++) {
                 tmp = _behaviors[i].Evaluate();
                 if (tmp > currentWaight) {
-                    _currentBehavior = i;
+                    tempBehavior = i;
                     currentWaight = tmp;
                 }
+            }
+
+            if(_currentBehavior != tempBehavior) {
+                _currentBehavior = tempBehavior;
+                _behaviors[_currentBehavior].StartExecution();
             }
         }
 
