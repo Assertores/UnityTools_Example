@@ -41,6 +41,8 @@ namespace AsserTOOLres {
             }
 
             if(_currentBehavior != tempBehavior) {
+                if(_currentBehavior >= 0)
+                    _behaviors[_currentBehavior].StopExecution();
                 _currentBehavior = tempBehavior;
                 _behaviors[_currentBehavior].StartExecution();
             }

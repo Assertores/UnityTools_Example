@@ -26,5 +26,10 @@ namespace AsserTOOLres {
         /// Executes one tick of the AI Behavior
         /// </summary>
         void Execute();
+
+        /// <summary>
+        /// Call this when you stop this Behavior
+        /// </summary>
+        void StopExecution();
     }
 }
