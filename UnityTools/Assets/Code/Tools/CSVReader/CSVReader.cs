@@ -9,11 +9,11 @@ namespace AsserTOOLres {
         #region ===== ===== DATA ===== =====
 
         //map<path, IDKey>
-        static Dictionary<string, string> _iDFromFile = new Dictionary<string, string>();
+        static Dictionary<string, string> s_iDFromFile = new Dictionary<string, string>();
 
         //if i get the Generic funktions to work ===== ===== ----- -----
         //static Dictionary<string, Dictionary<string, List<object>>> Library = new Dictionary<string, Dictionary<string, List<object>>>();//map<path, map<ID,List<Values>>>
-        static Dictionary<string, Dictionary<string, List<string>>> _library = new Dictionary<string, Dictionary<string, List<string>>>();//map<path, map<ID,List<Values>>>
+        static Dictionary<string, Dictionary<string, List<string>>> s_library = new Dictionary<string, Dictionary<string, List<string>>>();//map<path, map<ID,List<Values>>>
 
         #endregion
         #region ===== ===== CORE ===== =====
@@ -30,8 +30,8 @@ namespace AsserTOOLres {
         //if i get the Generic funktions to work ===== ===== ----- -----
         //public static Dictionary<string, List<object>> LoadCSV(string path, char seperator = ';') {
         public static Dictionary<string, List<string>> LoadCSV(string path, char seperator = ';') {
-            if (_library.ContainsKey(path)) {
-                return _library[path];
+            if (s_library.ContainsKey(path)) {
+                return s_library[path];
             }
 
             return ReloadCSV(path, seperator);
@@ -78,10 +78,10 @@ namespace AsserTOOLres {
             for (int i = 0; i < Lines.Length; i++) {
                 string[] LineValues = Lines[i].Trim().Split(seperator);
                 if (i == 0) {//TODO: identifier not in first column
-                    if (_iDFromFile.ContainsKey(path)) {
-                        _iDFromFile.Remove(path);
+                    if (s_iDFromFile.ContainsKey(path)) {
+                        s_iDFromFile.Remove(path);
                     }
-                    _iDFromFile.Add(path, LineValues[0]);
+                    s_iDFromFile.Add(path, LineValues[0]);
                 }
                 //if i get the Generic funktions to work ===== ===== ----- -----
                 //List<object> temp = new List<object>();
@@ -92,10 +92,10 @@ namespace AsserTOOLres {
                 value.Add(LineValues[0], temp);//TODO: identifier not in first column
             }
 
-            if (_library.ContainsKey(path)) {
-                _library.Remove(path);
+            if (s_library.ContainsKey(path)) {
+                s_library.Remove(path);
             }
-            _library.Add(path, value);
+            s_library.Add(path, value);
 
             return value;
         }
@@ -200,22 +200,22 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as string or as Error message starting with "ERROR:"</returns>
-        public static string getValueAsString(string path, string id, int columnIndex = 0, bool save = true) { //if the first column is the ID: column 0 will give you the next column after the ID. TL;DR: ID Column will be ignored
+        public static string GetValueAsString(string path, string id, int columnIndex = 0, bool save = true) { //if the first column is the ID: column 0 will give you the next column after the ID. TL;DR: ID Column will be ignored
             if (save) {
-                if (!_library.ContainsKey(path)) {
+                if (!s_library.ContainsKey(path)) {
                     if (LoadCSV(path).ContainsKey("ERROR")) {
                         return "ERROR: file " + path + " not found";
                     }
                 }
-                if (!_library[path].ContainsKey(id)) {
+                if (!s_library[path].ContainsKey(id)) {
                     return "ERROR: no " + id + " found in " + path;
                 }
-                if (columnIndex >= _library[path][id].Count) {
-                    return "ERROR: " + id + " in " + path + " has only " + _library[path][id].Count + " columns but you wanted column index " + columnIndex;
+                if (columnIndex >= s_library[path][id].Count) {
+                    return "ERROR: " + id + " in " + path + " has only " + s_library[path][id].Count + " columns but you wanted column index " + columnIndex;
                 }
             }
 
-            return (string)_library[path][id][columnIndex];
+            return (string)s_library[path][id][columnIndex];
         }
 
         /// <summary>
@@ -228,25 +228,25 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to specify it. default value = "" which uses the first row as identifier</param>
         /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
-        public static string getValueAsString(string path, string id, string columnName, bool save = true, string headerID = "") {
+        public static string GetValueAsString(string path, string id, string columnName, bool save = true, string headerID = "") {
             if (save) {
-                if (!_library.ContainsKey(path)) {
+                if (!s_library.ContainsKey(path)) {
                     if (LoadCSV(path).ContainsKey("ERROR")) {
                         return "ERROR: file " + path + " not found";
                     }
                 }
-                if (!_library[path].ContainsKey(id)) {
+                if (!s_library[path].ContainsKey(id)) {
                     return "ERROR: no " + id + " found in " + path;
                 }
-                if (_library[path][_iDFromFile[path]].IndexOf(columnName) < 0) {
+                if (s_library[path][s_iDFromFile[path]].IndexOf(columnName) < 0) {
                     return "ERROR: " + columnName + " not found in " + path;
                 }
-                if (_library[path][(headerID == "") ? _iDFromFile[path] : headerID].IndexOf(columnName) >= _library[path][id].Count) {
-                    return "ERROR: " + id + " in " + path + " has only " + _library[path][id].Count + " columns but you wanted column index " + _library[path][(headerID == "") ? _iDFromFile[path] : headerID].IndexOf(columnName);
+                if (s_library[path][(headerID == "") ? s_iDFromFile[path] : headerID].IndexOf(columnName) >= s_library[path][id].Count) {
+                    return "ERROR: " + id + " in " + path + " has only " + s_library[path][id].Count + " columns but you wanted column index " + s_library[path][(headerID == "") ? s_iDFromFile[path] : headerID].IndexOf(columnName);
                 }
             }
 
-            return getValueAsString(path, id, _library[path][(headerID == "") ? _iDFromFile[path] : headerID].IndexOf(columnName), false);
+            return GetValueAsString(path, id, s_library[path][(headerID == "") ? s_iDFromFile[path] : headerID].IndexOf(columnName), false);
         }
 
         //----- ----- From StreamingAsset ----- -----
@@ -260,8 +260,8 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
-        public static string getValueAsStringFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
-            return getValueAsString(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
+        public static string GetValueAsStringFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
+            return GetValueAsString(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
         }
 
         /// <summary>
@@ -274,8 +274,8 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to specify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as string or as Errormessage starting with "ERROR:"</returns>
-        public static string getValueAsStringFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
-            return getValueAsString(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
+        public static string GetValueAsStringFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
+            return GetValueAsString(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
         }
 
         #endregion
@@ -290,9 +290,9 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as int or the minimum int value (-2147483648)</returns>
-        public static int getValueAsInt(string path, string id, int columnIndex = 0, bool save = true) {
+        public static int GetValueAsInt(string path, string id, int columnIndex = 0, bool save = true) {
             int value;
-            if (!System.Int32.TryParse(getValueAsString(path, id, columnIndex, save), out value)) {
+            if (!System.Int32.TryParse(GetValueAsString(path, id, columnIndex, save), out value)) {
                 return System.Int32.MinValue;
             }
 
@@ -309,9 +309,9 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as int or the minimum int value (-2147483648)</returns>
-        public static int getValueAsInt(string path, string id, string columnName, bool save = true, string headerID = "") {
+        public static int GetValueAsInt(string path, string id, string columnName, bool save = true, string headerID = "") {
             int value;
-            if (!System.Int32.TryParse(getValueAsString(path, id, columnName, save, headerID), out value)) {
+            if (!System.Int32.TryParse(GetValueAsString(path, id, columnName, save, headerID), out value)) {
                 return System.Int32.MinValue;
             }
 
@@ -329,8 +329,8 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as int or the minimum int value (-2147483648)</returns>
-        public static int getValueAsIntFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
-            return getValueAsInt(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
+        public static int GetValueAsIntFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
+            return GetValueAsInt(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
         }
 
         /// <summary>
@@ -343,8 +343,8 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as int or the minimum int value (-2147483648)</returns>
-        public static int getValueAsIntFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
-            return getValueAsInt(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
+        public static int GetValueAsIntFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
+            return GetValueAsInt(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
         }
 
         #endregion
@@ -359,9 +359,9 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
-        public static float getValueAsFloat(string path, string id, int columnIndex = 0, bool save = true) {
+        public static float GetValueAsFloat(string path, string id, int columnIndex = 0, bool save = true) {
             float value;
-            if (!float.TryParse(getValueAsString(path, id, columnIndex, save), out value)) {
+            if (!float.TryParse(GetValueAsString(path, id, columnIndex, save), out value)) {
                 return float.MinValue;
             }
             return value;
@@ -377,9 +377,9 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
-        public static float getValueAsFloat(string path, string id, string columnName, bool save = true, string headerID = "") {
+        public static float GetValueAsFloat(string path, string id, string columnName, bool save = true, string headerID = "") {
             float value;
-            if (!float.TryParse(getValueAsString(path, id, columnName, save, headerID), out value)) {
+            if (!float.TryParse(GetValueAsString(path, id, columnName, save, headerID), out value)) {
                 return float.MinValue;
             }
 
@@ -397,8 +397,8 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
-        public static float getValueAsFloatFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
-            return getValueAsFloat(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
+        public static float GetValueAsFloatFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
+            return GetValueAsFloat(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
         }
 
         /// <summary>
@@ -411,8 +411,8 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as float or the minimum float value (-3.40282347E+38)</returns>
-        public static float getValueAsFloatFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
-            return getValueAsFloat(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
+        public static float GetValueAsFloatFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
+            return GetValueAsFloat(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
         }
 
         #endregion
@@ -427,9 +427,9 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as bool or false(sorry)</returns>
-        public static bool getValueAsBool(string path, string id, int columnIndex = 0, bool save = true) {
+        public static bool GetValueAsBool(string path, string id, int columnIndex = 0, bool save = true) {
             bool value;
-            if (!bool.TryParse(getValueAsString(path, id, columnIndex, save), out value)) {
+            if (!bool.TryParse(GetValueAsString(path, id, columnIndex, save), out value)) {
                 return false;
             }
 
@@ -446,9 +446,9 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as bool or false(sorry)</returns>
-        public static bool getValueAsBool(string path, string id, string columnName, bool save = true, string headerID = "") {
+        public static bool GetValueAsBool(string path, string id, string columnName, bool save = true, string headerID = "") {
             bool value;
-            if (!bool.TryParse(getValueAsString(path, id, columnName, save, headerID), out value)) {
+            if (!bool.TryParse(GetValueAsString(path, id, columnName, save, headerID), out value)) {
                 return false;
             }
 
@@ -466,8 +466,8 @@ namespace AsserTOOLres {
         /// <param name="columnIndex">value index </param>
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <returns>the value as bool or false(sorry)</returns>
-        public static bool getValueAsBoolFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
-            return getValueAsBool(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
+        public static bool GetValueAsBoolFromStreamingAsset(string path, string id, int columnIndex = 0, bool save = true) {
+            return GetValueAsBool(Application.streamingAssetsPath + "/" + path, id, columnIndex, save);
         }
 
         /// <summary>
@@ -480,8 +480,8 @@ namespace AsserTOOLres {
         /// <param name="save">if false all checks and safety measures are deactivated. default value = true</param>
         /// <param name="headerID">identifier for the header if you want to spesify it. default value = "" whitch uses the first row as identifier</param>
         /// <returns>the value as bool or false(sorry)</returns>
-        public static bool getValueAsBoolFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
-            return getValueAsBool(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
+        public static bool GetValueAsBoolFromStreamingAsset(string path, string id, string columnName, bool save = true, string headerID = "") {
+            return GetValueAsBool(Application.streamingAssetsPath + "/" + path, id, columnName, save, headerID);
         }
 
         #endregion

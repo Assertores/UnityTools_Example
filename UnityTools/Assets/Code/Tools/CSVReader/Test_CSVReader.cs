@@ -33,10 +33,10 @@ public class Test_CSVReader : MonoBehaviour {
         float fTemp;
         bool bTemp;
 
-        sTemp = CSVReader.getValueAsString(_wholePath, "WATER", "German");
-        iTemp = CSVReader.getValueAsIntFromStreamingAsset(_streamingAssetPath, "LIVE", 0);
-        fTemp = CSVReader.getValueAsFloatFromStreamingAsset(_streamingAssetPath, "SPEED", 0);
-        bTemp = CSVReader.getValueAsBoolFromStreamingAsset(_streamingAssetPath, "NUDE", 0);
+        sTemp = CSVReader.GetValueAsString(_wholePath, "WATER", "German");
+        iTemp = CSVReader.GetValueAsIntFromStreamingAsset(_streamingAssetPath, "LIVE", 0);
+        fTemp = CSVReader.GetValueAsFloatFromStreamingAsset(_streamingAssetPath, "SPEED", 0);
+        bTemp = CSVReader.GetValueAsBoolFromStreamingAsset(_streamingAssetPath, "NUDE", 0);
 
         print("WATER in German: " + sTemp + " | LIVE: " + iTemp + " | SPEED: " + fTemp + " | NUDE: " + bTemp);
 
