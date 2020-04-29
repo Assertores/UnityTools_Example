@@ -38,7 +38,7 @@ namespace AsserTOOLres {
 			}
 			s_instanceBackingField = this as T;
 
-			OnAwake();
+			OnMyAwake();
 		}
 
 		static T SaveGetInstance() {
