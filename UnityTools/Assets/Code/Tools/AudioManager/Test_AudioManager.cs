@@ -13,17 +13,17 @@ public class Test_AudioManager : MonoBehaviour {
     }
 
     IEnumerator Retest() {
-        if (AudioManager._reverences.Count == 0)
+        if (!AudioManager.Exists())
             yield break;
 
-        AudioManager._reverences[0].PlayAudioByName("Message");
+        AudioManager.s_instance.PlayAudioByName("Message");
 
         yield return new WaitForSeconds(2);
 
-        AudioManager._reverences[0].PlayAudioOnRef("Charge", _testSource);
+        AudioManager.s_instance.PlayAudioOnRef("Charge", _testSource);
 
         yield return new WaitForSeconds(2);
 
-        AudioManager._reverences[0].PlayAudioOnRef("Explosion", _testObject);
+        AudioManager.s_instance.PlayAudioOnRef("Explosion", _testObject);
     }
 }

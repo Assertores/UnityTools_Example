@@ -3,91 +3,111 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace AsserTOOLres {
-    /// <summary>
-    /// make shure that all added audioSources are not PlayOnAwake
-    /// </summary>
-    public class AudioManager : MonoBehaviour {
+	[System.Serializable]
+	public class Audio {
+		public string name;
+		public AudioSource referece;
+	}
 
-        #region ===== ===== REFERENCES ===== =====
+	/// <summary>
+	/// make shure that all added audioSources are not PlayOnAwake
+	/// requiers Singleton
+	/// </summary>
+	public sealed class AudioManager : Singleton<AudioManager> {
 
-        public static List<AudioManager> _reverences = new List<AudioManager>();
+		#region ===== ===== DATA ===== =====
 
-        #endregion
-        #region ===== ===== DATA ===== =====
+		[Tooltip("make shure that all added audioSources are not PlayOnAwake")]
+		[SerializeField] Audio[] r_clips;
 
-        [Tooltip("make shure that all added audioSources are not PlayOnAwake")]
-        [SerializeField] Audio[] _clips;
+		Dictionary<string, AudioSource> m_clipRefs = new Dictionary<string, AudioSource>();
 
-        Dictionary<string, AudioSource> _clipRefs = new Dictionary<string, AudioSource>();
+		#endregion
+		#region ===== ===== API ===== =====
 
-        #endregion
-        #region ===== ===== SINGELTON ===== =====
+		/// <summary>
+		/// Plays an audio by referenced name
+		/// </summary>
+		/// <param name="name">the name as key</param>
+		public void PlayAudioByName(string name) {
+			m_clipRefs[name]?.Play();
+		}
 
-        void Awake() {
-            if(_reverences.Count > 0) {
-                Destroy(this);
-                return;
-            }
-            foreach(var it in _clips) {
-                if (it.refereces && !_clipRefs.ContainsKey(it.name)) {
-                    _clipRefs.Add(it.name, it.refereces);
-                }
-            }
-            _reverences.Add(this);
-        }
+		/// <summary>
+		/// adds a AudioSource component to the GameObject, sets it to the referenced audio and plays it
+		/// </summary>
+		/// <param name="name">the name as key</param>
+		/// <param name="reference">the referenced GameObject</param>
+		public AudioSource PlayAudioOnRef(string name, GameObject reference) {
+			if(!m_clipRefs.ContainsKey(name))
+				return null;
 
-        private void OnDestroy() {
-            _reverences.Remove(this);
-        }
+			AudioSource tmp = reference.AddComponent<AudioSource>();
 
-        #endregion
-        #region ===== ===== API ===== =====
+			return PlayAudioOnRef(name, tmp);
+		}
 
-        /// <summary>
-        /// Plays an audio by referenced name
-        /// </summary>
-        /// <param name="name">the name as key</param>
-        public void PlayAudioByName(string name) {
-            _clipRefs[name]?.Play();
-        }
+		/// <summary>
+		/// sets the referenced AudioSource to the Rreferenced audio and plays it
+		/// </summary>
+		/// <param name="name">the name as key</param>
+		/// <param name="reference">the referenced AudioSource</param>
+		public AudioSource PlayAudioOnRef(string name, AudioSource reference) {
+			if(!m_clipRefs.ContainsKey(name))
+				return null;
 
-        /// <summary>
-        /// adds a AudioSource component to the GameObject, sets it to the referenced audio and plays it
-        /// </summary>
-        /// <param name="name">the name as key</param>
-        /// <param name="reference">the referenced GameObject</param>
-        public void PlayAudioOnRef(string name, GameObject reference) {
-            if (!_clipRefs.ContainsKey(name))
-                return;
+			DeepCopyAudioSource(m_clipRefs[name], reference);
 
-            AudioSource temp = reference.AddComponent<AudioSource>();
+			reference.Play();
 
-            PlayAudioOnRef(name, temp);
-        }
+			return reference;
+		}
 
-        /// <summary>
-        /// sets the referenced AudioSource to the Rreferenced audio and plays it
-        /// </summary>
-        /// <param name="name">the name as key</param>
-        /// <param name="reference">the referenced AudioSource</param>
-        public void PlayAudioOnRef(string name, AudioSource reference) {
-            if (!_clipRefs.ContainsKey(name))
-                return;
+		#endregion
+		#region ===== ===== CORE ===== =====
 
-            //----- ----- Deep Copy ----- -----
-            System.Reflection.PropertyInfo[] fields = typeof(AudioSource).GetProperties();
-            print("i'm here: " + typeof(AudioSource).GetField("volume"));
-            foreach (var field in fields) {
-                print("i'm coping " + field.Name);
-                if (!field.CanWrite || field.Name == "name")
-                    continue;
+		protected override void OnMyAwake() {
+			foreach(var it in r_clips) {
+				if(!it.referece) {
+					Debug.LogWarning("reference for audio " + it.name + " not set.");
+					continue;
+				}
+				if(it.name == "") {
+					it.name = it.referece.clip.name;
+				}
+				if(m_clipRefs.ContainsKey(it.name)) {
+					continue;
+				}
 
-                field.SetValue(reference, field.GetValue(_clipRefs[name]));
-            }
+				m_clipRefs[it.name] = it.referece;
+			}
+		}
 
-            reference.Play();
-        }
+		// TODO: move To own Element
+		void DeepCopyAudioSource(AudioSource origin, AudioSource target) {
+			System.Reflection.PropertyInfo[] fields = typeof(AudioSource).GetProperties();
+			foreach(var field in fields) {
+				if(!field.CanWrite || field.Name == "name")
+					continue;
+				if(isPropertyObsolete(field)) {
+					continue;
+				}
+				try {
+					field.SetValue(target, field.GetValue(origin));
+				} catch { }
+			}
+		}
 
-        #endregion
-    }
+		bool isPropertyObsolete(System.Reflection.PropertyInfo property) {
+			var attrData = property.CustomAttributes;
+			foreach(var it in attrData) {
+				if(it.AttributeType == typeof(System.ObsoleteAttribute)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		#endregion
+	}
 }
