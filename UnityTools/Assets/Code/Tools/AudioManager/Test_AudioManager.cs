@@ -5,25 +5,25 @@ using AsserTOOLres;
 
 public class Test_AudioManager : MonoBehaviour {
 
-    [SerializeField] GameObject _testObject;
-    [SerializeField] AudioSource _testSource;
+	[SerializeField] GameObject _testObject;
+	[SerializeField] AudioSource _testSource;
 
-    void Start() {
-        StartCoroutine(Retest());
-    }
+	void Start() {
+		StartCoroutine(Retest());
+	}
 
-    IEnumerator Retest() {
-        if (!AudioManager.Exists())
-            yield break;
+	IEnumerator Retest() {
+		if(!AudioManager.Exists())
+			yield break;
 
-        AudioManager.s_instance.PlayAudioByName("Message");
+		AudioManager.s_instance.PlayAudioByName("Message");
 
-        yield return new WaitForSeconds(2);
+		yield return new WaitForSeconds(2);
 
-        AudioManager.s_instance.PlayAudioOnRef("Charge", _testSource);
+		AudioManager.s_instance.PlayAudioOnRef("Charge", _testSource);
 
-        yield return new WaitForSeconds(2);
+		yield return new WaitForSeconds(2);
 
-        AudioManager.s_instance.PlayAudioOnRef("Explosion", _testObject);
-    }
+		AudioManager.s_instance.PlayAudioOnRef("Explosion", _testObject);
+	}
 }

@@ -5,28 +5,28 @@ using AsserTOOLres;
 
 public class Test_Localization : MonoBehaviour {
 
-    void Start() {
-        StartCoroutine(Retest());
-    }
+	void Start() {
+		StartCoroutine(Retest());
+	}
 
-    IEnumerator Retest() {
-        print("i'm changing the Language to German on " + Localize_text.references.Count + " instances.");
-        foreach(var it in Localize_text.references) {
-            it.ChangeContent("German");
-        }
+	IEnumerator Retest() {
+		print("i'm changing the Language to German on " + Localize_text.references.Count + " instances.");
+		foreach(var it in Localize_text.references) {
+			it.ChangeContent("German");
+		}
 
-        yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(3);
 
-        print("i'm changing the Language to English on " + Localize_text.references.Count + " instances.");
-        foreach (var it in Localize_text.references) {
-            it.ChangeContent("English");
-        }
+		print("i'm changing the Language to English on " + Localize_text.references.Count + " instances.");
+		foreach(var it in Localize_text.references) {
+			it.ChangeContent("English");
+		}
 
-        yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(3);
 
-        print("i'm testing vor Latin whitch is not in the csv file");
-        foreach (var it in Localize_text.references) {
-            it.ChangeContent("Latin");
-        }
-    }
+		print("i'm testing vor Latin whitch is not in the csv file");
+		foreach(var it in Localize_text.references) {
+			it.ChangeContent("Latin");
+		}
+	}
 }

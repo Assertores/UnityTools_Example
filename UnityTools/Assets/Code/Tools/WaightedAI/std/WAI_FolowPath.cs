@@ -5,68 +5,68 @@ using UnityEngine.AI;
 using AsserTOOLres;
 
 namespace AsserTOOLres_std {
-    [RequireComponent(typeof(AIBehavior))]
-    [RequireComponent(typeof(NavMeshAgent))]
-    public class WAI_FolowPath : MonoBehaviour, IWaightedAIDesition {
+	[RequireComponent(typeof(AIBehavior))]
+	[RequireComponent(typeof(NavMeshAgent))]
+	public class WAI_FolowPath : MonoBehaviour, IWaightedAIDesition {
 
-        [Header("References")]
-        [SerializeField] Transform _pathRootNode;
+		[Header("References")]
+		[SerializeField] Transform _pathRootNode;
 
-        [Header("Behavior")]
-        [SerializeField] AnimationCurve _timeSinceLastNodeReachedCurve;
-        float _timeSinceLastNodeReached = 0;
-        [SerializeField] AnimationCurve _distanceToTargetCurve;
-        
-        [Header("Balancing")]
-        [SerializeField] int _firstTarget = 0;
+		[Header("Behavior")]
+		[SerializeField] AnimationCurve _timeSinceLastNodeReachedCurve;
+		float _timeSinceLastNodeReached = 0;
+		[SerializeField] AnimationCurve _distanceToTargetCurve;
 
-        [Header("Debug")]
-        public float DBValue;
+		[Header("Balancing")]
+		[SerializeField] int _firstTarget = 0;
 
-        AIBehavior _parent;
-        NavMeshAgent _nMA;
-        
-        public void Initialice(AIBehavior aI) {
-            _parent = aI;
-            _nMA = GetComponent<NavMeshAgent>();
-        }
+		[Header("Debug")]
+		public float DBValue;
 
-        public float Evaluate() {
-            float value;
+		AIBehavior _parent;
+		NavMeshAgent _nMA;
 
-            value = _timeSinceLastNodeReachedCurve.Evaluate(Time.timeSinceLevelLoad - _timeSinceLastNodeReached);
-            value *= _distanceToTargetCurve.Evaluate(Vector3.Distance(_pathRootNode.GetChild(_firstTarget).position, transform.position));
+		public void Initialice(AIBehavior aI) {
+			_parent = aI;
+			_nMA = GetComponent<NavMeshAgent>();
+		}
 
-            DBValue = value;
-            return value;
-        }
+		public float Evaluate() {
+			float value;
 
-        public void StartExecution() {
-            _nMA.SetDestination(_pathRootNode.GetChild(_firstTarget).position);
-        }
+			value = _timeSinceLastNodeReachedCurve.Evaluate(Time.timeSinceLevelLoad - _timeSinceLastNodeReached);
+			value *= _distanceToTargetCurve.Evaluate(Vector3.Distance(_pathRootNode.GetChild(_firstTarget).position, transform.position));
 
-        public void Execute() {
+			DBValue = value;
+			return value;
+		}
 
-            if (_nMA.remainingDistance <= _nMA.stoppingDistance) {
+		public void StartExecution() {
+			_nMA.SetDestination(_pathRootNode.GetChild(_firstTarget).position);
+		}
 
-                NextTaget();
-                return;
-            }
+		public void Execute() {
 
-            _nMA.SetDestination(_pathRootNode.GetChild(_firstTarget).position);
-        }
+			if(_nMA.remainingDistance <= _nMA.stoppingDistance) {
 
-        void NextTaget() {
-            _firstTarget++;
-            _firstTarget %= _pathRootNode.childCount;
+				NextTaget();
+				return;
+			}
 
-            _timeSinceLastNodeReached = Time.timeSinceLevelLoad;
+			_nMA.SetDestination(_pathRootNode.GetChild(_firstTarget).position);
+		}
 
-            _parent.Reevaluate();
-        }
+		void NextTaget() {
+			_firstTarget++;
+			_firstTarget %= _pathRootNode.childCount;
 
-        public void StopExecution() {
-            _nMA.SetDestination(transform.position);
-        }
-    }
+			_timeSinceLastNodeReached = Time.timeSinceLevelLoad;
+
+			_parent.Reevaluate();
+		}
+
+		public void StopExecution() {
+			_nMA.SetDestination(transform.position);
+		}
+	}
 }

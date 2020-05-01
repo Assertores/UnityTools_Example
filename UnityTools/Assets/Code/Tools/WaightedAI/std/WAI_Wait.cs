@@ -5,42 +5,42 @@ using UnityEngine.AI;
 using AsserTOOLres;
 
 namespace AsserTOOLres_std {
-    [RequireComponent(typeof(AIBehavior))]
-    [RequireComponent(typeof(NavMeshAgent))]
-    public class WAI_Wait : MonoBehaviour, IWaightedAIDesition {
+	[RequireComponent(typeof(AIBehavior))]
+	[RequireComponent(typeof(NavMeshAgent))]
+	public class WAI_Wait : MonoBehaviour, IWaightedAIDesition {
 
-        [Header("Behavior")]
-        [SerializeField] AnimationCurve _waitTimeCurve;
-        float _startTime = 0;
+		[Header("Behavior")]
+		[SerializeField] AnimationCurve _waitTimeCurve;
+		float _startTime = 0;
 
-        [Header("Debug")]
-        public float DBValue;
+		[Header("Debug")]
+		public float DBValue;
 
-        NavMeshAgent _nMA;
+		NavMeshAgent _nMA;
 
-        public void Initialice(AIBehavior aI) {
-            _nMA = GetComponent<NavMeshAgent>();
-        }
+		public void Initialice(AIBehavior aI) {
+			_nMA = GetComponent<NavMeshAgent>();
+		}
 
-        public float Evaluate() {
-            float value;
+		public float Evaluate() {
+			float value;
 
-            value = _waitTimeCurve.Evaluate(Time.timeSinceLevelLoad - _startTime);
+			value = _waitTimeCurve.Evaluate(Time.timeSinceLevelLoad - _startTime);
 
-            DBValue = value;
-            return value;
-        }
+			DBValue = value;
+			return value;
+		}
 
-        public void StartExecution() {
-            _startTime = Time.timeSinceLevelLoad;
-        }
+		public void StartExecution() {
+			_startTime = Time.timeSinceLevelLoad;
+		}
 
-        public void Execute() {
+		public void Execute() {
 
-        }
+		}
 
-        public void StopExecution() {
+		public void StopExecution() {
 
-        }
-    }
+		}
+	}
 }
