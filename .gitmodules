@@ -1,0 +1,3 @@
+[submodule "UnityTools/Assets/Code/Tools"]
+	path = UnityTools/Assets/Code/Tools
+	url = https://github.com/Assertores/UnityTools.git
